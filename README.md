@@ -1,73 +1,233 @@
-# Welcome to your Lovable project
+# CampusWA - Plateforme de Gestion d'Universités et d'Amphithéâtres
 
-## Project info
+## 🎓 Description
 
-**URL**: https://lovable.dev/projects/c517ed73-031e-446f-b587-8f78499334f4
+CampusWA est une application web moderne de gestion administrative pour les universités et leurs amphithéâtres. Elle permet de centraliser et gérer efficacement les informations des établissements d'enseignement supérieur et de leurs infrastructures.
 
-## How can I edit this code?
+## ✨ Fonctionnalités
 
-There are several ways of editing your application.
+### 🏠 Page d'Accueil
+- Présentation attractive du projet CampusWA
+- Design moderne avec gradients et animations
+- Navigation intuitive vers le panel d'administration
 
-**Use Lovable**
+### 🔧 Panel d'Administration
+- **Dashboard**: Vue d'ensemble avec statistiques et métriques clés
+- **Gestion des Universités**: CRUD complet pour les universités
+- **Gestion des Amphithéâtres**: CRUD complet pour les amphithéâtres
+- Interface responsive et intuitive
+- Sidebar de navigation avec indicateurs visuels
+- Header avec informations utilisateur
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/c517ed73-031e-446f-b587-8f78499334f4) and start prompting.
+### 📊 Fonctionnalités CRUD
 
-Changes made via Lovable will be committed automatically to this repo.
+#### Universités
+- ✅ Lister toutes les universités
+- ✅ Créer une nouvelle université
+- ✅ Modifier une université existante
+- ✅ Recherche et filtres
+- ✅ Gestion des statuts (Actif, Brouillon)
 
-**Use your preferred IDE**
+#### Amphithéâtres
+- ✅ Lister tous les amphithéâtres
+- ✅ Créer un nouvel amphithéâtre
+- ✅ Modifier un amphithéâtre existant
+- ✅ Association avec les universités
+- ✅ Gestion de la capacité et statuts
+- ✅ Statistiques de capacité
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠 Technologies Utilisées
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Frontend
+- **React 18** - Bibliothèque UI moderne
+- **TypeScript** - Typage statique pour plus de robustesse
+- **Vite** - Bundler rapide pour le développement
+- **Tailwind CSS** - Framework CSS utilitaire
+- **React Router Dom** - Routage côté client
+- **Lucide React** - Icônes modernes
 
-Follow these steps:
+### UI Components
+- **Radix UI** - Composants accessibles et personnalisables
+- **Shadcn/ui** - Système de design components
+- **React Hook Form** - Gestion des formulaires
+- **Sonner** - Notifications toast élégantes
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### État et Données
+- **TanStack Query** - Gestion d'état serveur et cache
+- **Zod** - Validation de schémas TypeScript
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Installation et Démarrage
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Prérequis
+- Node.js 20+ 
+- npm ou yarn ou bun
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Installation
+```bash
+# Cloner le repository
+git clone [url-du-repository]
+cd campuswa
+
+# Installer les dépendances
+npm install
+# ou
+yarn install
+# ou
+bun install
+
+# Démarrer le serveur de développement
 npm run dev
+# ou
+yarn dev
+# ou
+bun dev
 ```
 
-**Edit a file directly in GitHub**
+L'application sera accessible sur `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📁 Structure du Projet
 
-**Use GitHub Codespaces**
+```
+src/
+├── components/          # Composants réutilisables
+│   ├── admin/          # Composants spécifiques à l'admin
+│   └── ui/             # Composants UI de base (shadcn)
+├── pages/              # Pages de l'application
+│   ├── admin/          # Pages d'administration
+│   │   ├── universities/   # Pages CRUD universités
+│   │   └── amphitheaters/  # Pages CRUD amphithéâtres
+│   └── Home.tsx        # Page d'accueil
+├── hooks/              # Hooks React personnalisés
+├── lib/                # Utilitaires et configurations
+└── assets/             # Images et ressources statiques
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🎨 Design System
 
-## What technologies are used for this project?
+### Palette de Couleurs
+- **Primaire**: Bleu éducatif (`hsl(213, 94%, 68%)`)
+- **Accent**: Violet moderne (`hsl(262, 83%, 58%)`)
+- **Succès**: Vert validation (`hsl(146, 64%, 47%)`)
+- **Attention**: Orange (`hsl(32, 95%, 59%)`)
 
-This project is built with:
+### Gradients
+- **Primaire**: Dégradé bleu-violet pour les éléments héros
+- **Subtil**: Dégradés légers pour les backgrounds
+- **Glow**: Effets de lueur pour les interactions
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Animations
+- Transitions fluides (`cubic-bezier(0.4, 0, 0.2, 1)`)
+- Animations d'apparition (`fade-in`)
+- Effets de hover interactifs
 
-## How can I deploy this project?
+## 🔌 Intégration API
 
-Simply open [Lovable](https://lovable.dev/projects/c517ed73-031e-446f-b587-8f78499334f4) and click on Share -> Publish.
+L'application est prête pour l'intégration avec vos APIs existantes. Les points d'intégration sont marqués par des commentaires `TODO` dans le code :
 
-## Can I connect a custom domain to my Lovable project?
+### Endpoints Requis
 
-Yes, you can!
+#### Universités
+- `GET /api/universities` - Liste des universités
+- `POST /api/universities` - Créer une université
+- `GET /api/universities/:id` - Détails d'une université
+- `PUT /api/universities/:id` - Modifier une université
+- `DELETE /api/universities/:id` - Supprimer une université
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+#### Amphithéâtres
+- `GET /api/amphitheaters` - Liste des amphithéâtres
+- `POST /api/amphitheaters` - Créer un amphithéâtre
+- `GET /api/amphitheaters/:id` - Détails d'un amphithéâtre
+- `PUT /api/amphitheaters/:id` - Modifier un amphithéâtre
+- `DELETE /api/amphitheaters/:id` - Supprimer un amphithéâtre
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Structure des Données
+
+#### Université
+```typescript
+interface University {
+  id: string;
+  name: string;
+  slug: string;
+  location: string;
+  description?: string;
+  photos: string[];
+  status: 'active' | 'draft';
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+#### Amphithéâtre
+```typescript
+interface Amphitheater {
+  id: string;
+  name: string;
+  slug: string;
+  universityId: string;
+  location: string;
+  capacity: number;
+  description?: string;
+  photos: string[];
+  status: 'active' | 'maintenance' | 'draft';
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+## 🔧 Configuration
+
+### Variables d'Environnement
+Créez un fichier `.env.local` à la racine du projet :
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api
+VITE_APP_NAME=CampusWA
+```
+
+### Personnalisation du Design
+Le système de design peut être personnalisé via :
+- `src/index.css` - Variables CSS et tokens de design
+- `tailwind.config.ts` - Configuration Tailwind personnalisée
+
+## 📱 Responsive Design
+
+L'application est entièrement responsive avec des breakpoints optimisés :
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px  
+- **Desktop**: > 1024px
+
+## 🚀 Déploiement
+
+### Build de Production
+```bash
+npm run build
+# ou
+yarn build
+# ou
+bun run build
+```
+
+Les fichiers de production seront générés dans le dossier `dist/`
+
+### Déploiement sur Lovable
+L'application est hébergée sur Lovable et peut être déployée en un clic via le bouton "Publish" dans l'interface.
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créez une branche feature (`git checkout -b feature/ma-nouvelle-fonctionnalite`)
+3. Committez vos changements (`git commit -am 'Ajout de ma nouvelle fonctionnalité'`)
+4. Push vers la branche (`git push origin feature/ma-nouvelle-fonctionnalite`)
+5. Ouvrez une Pull Request
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+
+## 📞 Support
+
+Pour toute question ou support, contactez l'équipe de développement.
+
+---
+
+**CampusWA** - Moderniser la gestion universitaire avec style et efficacité 🎓✨

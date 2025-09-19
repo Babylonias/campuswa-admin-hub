@@ -184,10 +184,12 @@ const Amphitheaters = () => {
                   <Eye className="h-4 w-4 mr-1" />
                   Voir
                 </Button>
-                <Button size="sm" variant="ghost" className="flex-1 hover:bg-primary-light hover:text-primary">
-                  <Edit className="h-4 w-4 mr-1" />
-                  Modifier
-                </Button>
+                <Link to={`/admin/amphitheaters/${amphitheater.id}/edit`} className="flex-1">
+                  <Button size="sm" variant="ghost" className="w-full hover:bg-primary-light hover:text-primary">
+                    <Edit className="h-4 w-4 mr-1" />
+                    Modifier
+                  </Button>
+                </Link>
                 <Button size="sm" variant="ghost" className="hover:bg-destructive/10 hover:text-destructive">
                   <Trash2 className="h-4 w-4" />
                 </Button>

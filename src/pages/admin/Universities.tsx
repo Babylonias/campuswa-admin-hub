@@ -154,10 +154,12 @@ const Universities = () => {
                   <Eye className="h-4 w-4 mr-1" />
                   Voir
                 </Button>
-                <Button size="sm" variant="ghost" className="flex-1 hover:bg-accent-light hover:text-accent">
-                  <Edit className="h-4 w-4 mr-1" />
-                  Modifier
-                </Button>
+                <Link to={`/admin/universities/${university.id}/edit`} className="flex-1">
+                  <Button size="sm" variant="ghost" className="w-full hover:bg-accent-light hover:text-accent">
+                    <Edit className="h-4 w-4 mr-1" />
+                    Modifier
+                  </Button>
+                </Link>
                 <Button size="sm" variant="ghost" className="hover:bg-destructive/10 hover:text-destructive">
                   <Trash2 className="h-4 w-4" />
                 </Button>
