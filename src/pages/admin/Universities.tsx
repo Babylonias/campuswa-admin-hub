@@ -4,18 +4,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Plus, Search, MapPin, Edit, Trash2, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
+import UniversityModal from "@/components/admin/UniversityModal";
+import UniversityDetailModal from "@/components/admin/UniversityDetailModal";
 
 const Universities = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedUniversity, setSelectedUniversity] = useState(null);
+  const [universities, setUniversities] = useState([
 
-  // Mock data - À remplacer par vos vraies données API
-  const universities = [
     {
       id: 1,
       name: "Université Cheikh Anta Diop",
       slug: "ucad-dakar",
       location: "Dakar, Sénégal",
+      description: "Principale université du Sénégal fondée en 1957.",
       photos: 5,
       amphitheaters: 12,
       status: "active"
@@ -25,6 +29,7 @@ const Universities = () => {
       name: "Université Gaston Berger",
       slug: "ugb-saint-louis",
       location: "Saint-Louis, Sénégal",
+      description: "Université moderne spécialisée dans les sciences et technologies.",
       photos: 8,
       amphitheaters: 8,
       status: "active"
@@ -34,6 +39,7 @@ const Universities = () => {
       name: "Université Assane Seck",
       slug: "univ-ziguinchor",
       location: "Ziguinchor, Sénégal",
+      description: "Université régionale du sud du Sénégal.",
       photos: 3,
       amphitheaters: 6,
       status: "draft"
@@ -43,11 +49,12 @@ const Universities = () => {
       name: "Université Alioune Diop",
       slug: "uadb-bambey",
       location: "Bambey, Sénégal",
+      description: "Université agricole et de développement rural.",
       photos: 4,
       amphitheaters: 7,
       status: "active"
     }
-  ];
+  ]);
 
   const filteredUniversities = universities.filter(university =>
     university.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -65,6 +72,46 @@ const Universities = () => {
     }
   };
 
+  const handleAddUniversity = () => {
+    setSelectedUniversity(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditUniversity = (university) => {
+    setSelectedUniversity(university);
+    setIsModalOpen(true);
+  };
+
+  const handleViewUniversity = (university) => {
+    setSelectedUniversity(university);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleSaveUniversity = (universityData) => {
+    if (selectedUniversity) {
+      // Update existing university
+      setUniversities(prev => prev.map(u => 
+        u.id === selectedUniversity.id 
+          ? { ...u, ...universityData }
+          : u
+      ));
+    } else {
+      // Add new university
+      const newUniversity = {
+        ...universityData,
+        id: Date.now(),
+        photos: 0,
+        amphitheaters: 0
+      };
+      setUniversities(prev => [...prev, newUniversity]);
+    }
+  };
+
+  const handleEditFromDetail = (university) => {
+    setIsDetailModalOpen(false);
+    setSelectedUniversity(university);
+    setIsModalOpen(true);
+  };
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -79,12 +126,10 @@ const Universities = () => {
           </p>
         </div>
         
-        <Link to="/admin/universities/new">
-          <Button variant="default" className="flex items-center space-x-2">
-            <Plus className="h-4 w-4" />
-            <span>Ajouter Université</span>
-          </Button>
-        </Link>
+        <Button variant="default" className="flex items-center space-x-2" onClick={handleAddUniversity}>
+          <Plus className="h-4 w-4" />
+          <span>Ajouter Université</span>
+        </Button>
       </div>
 
       {/* Search & Filters */}
@@ -150,16 +195,24 @@ const Universities = () => {
               </div>
 
               <div className="flex items-center space-x-2 pt-2">
-                <Button size="sm" variant="ghost" className="flex-1 hover:bg-primary-light hover:text-primary">
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="flex-1 hover:bg-primary-light hover:text-primary"
+                  onClick={() => handleViewUniversity(university)}
+                >
                   <Eye className="h-4 w-4 mr-1" />
                   Voir
                 </Button>
-                <Link to={`/admin/universities/${university.id}/edit`} className="flex-1">
-                  <Button size="sm" variant="ghost" className="w-full hover:bg-accent-light hover:text-accent">
-                    <Edit className="h-4 w-4 mr-1" />
-                    Modifier
-                  </Button>
-                </Link>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="flex-1 hover:bg-accent-light hover:text-accent"
+                  onClick={() => handleEditUniversity(university)}
+                >
+                  <Edit className="h-4 w-4 mr-1" />
+                  Modifier
+                </Button>
                 <Button size="sm" variant="ghost" className="hover:bg-destructive/10 hover:text-destructive">
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -178,15 +231,28 @@ const Universities = () => {
             <p className="text-muted-foreground mb-6">
               {searchTerm ? "Aucun résultat pour votre recherche." : "Commencez par ajouter votre première université."}
             </p>
-            <Link to="/admin/universities/new">
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Ajouter une Université
-              </Button>
-            </Link>
+            <Button onClick={handleAddUniversity}>
+              <Plus className="h-4 w-4 mr-2" />
+              Ajouter une Université
+            </Button>
           </CardContent>
         </Card>
       )}
+
+      {/* Modals */}
+      <UniversityModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        university={selectedUniversity}
+        onSave={handleSaveUniversity}
+      />
+
+      <UniversityDetailModal
+        open={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
+        university={selectedUniversity}
+        onEdit={handleEditFromDetail}
+      />
     </div>
   );
 };

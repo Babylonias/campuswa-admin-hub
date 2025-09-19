@@ -4,20 +4,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Plus, Search, MapPin, Edit, Trash2, Eye, Building2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import AmphitheaterModal from "@/components/admin/AmphitheaterModal";
+import AmphitheaterDetailModal from "@/components/admin/AmphitheaterDetailModal";
 
 const Amphitheaters = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedAmphitheater, setSelectedAmphitheater] = useState(null);
+  const [amphitheaters, setAmphitheaters] = useState([
 
-  // Mock data - À remplacer par vos vraies données API
-  const amphitheaters = [
     {
       id: 1,
       name: "Amphithéâtre Cheikh Anta Diop",
       slug: "amphi-cad",
       university: "Université Cheikh Anta Diop",
+      universityId: "1",
       location: "Dakar, Sénégal",
       capacity: 500,
+      description: "Grand amphithéâtre principal de l'université.",
       photos: 3,
       status: "active"
     },
@@ -26,8 +31,10 @@ const Amphitheaters = () => {
       name: "Grand Amphithéâtre UGB",
       slug: "grand-amphi-ugb",
       university: "Université Gaston Berger",
+      universityId: "2",
       location: "Saint-Louis, Sénégal",
       capacity: 800,
+      description: "Le plus grand amphithéâtre de l'université.",
       photos: 5,
       status: "active"
     },
@@ -36,8 +43,10 @@ const Amphitheaters = () => {
       name: "Amphithéâtre Léopold Sédar Senghor",
       slug: "amphi-lss",
       university: "Université Cheikh Anta Diop",
+      universityId: "1",
       location: "Dakar, Sénégal",
       capacity: 300,
+      description: "Amphithéâtre dédié aux lettres et sciences humaines.",
       photos: 2,
       status: "maintenance"
     },
@@ -46,8 +55,10 @@ const Amphitheaters = () => {
       name: "Amphithéâtre Central",
       slug: "amphi-central-ziguinchor",
       university: "Université Assane Seck",
+      universityId: "3",
       location: "Ziguinchor, Sénégal",
       capacity: 400,
+      description: "Amphithéâtre central du campus.",
       photos: 4,
       status: "active"
     },
@@ -56,12 +67,14 @@ const Amphitheaters = () => {
       name: "Amphithéâtre Birago Diop",
       slug: "amphi-birago-diop",
       university: "Université Alioune Diop",
+      universityId: "4",
       location: "Bambey, Sénégal",
       capacity: 250,
+      description: "Amphithéâtre moderne avec équipements numériques.",
       photos: 3,
       status: "draft"
     }
-  ];
+  ]);
 
   const filteredAmphitheaters = amphitheaters.filter(amphi =>
     amphi.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,6 +101,66 @@ const Amphitheaters = () => {
     return "text-muted-foreground";
   };
 
+  const handleAddAmphitheater = () => {
+    setSelectedAmphitheater(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditAmphitheater = (amphitheater) => {
+    // Convert for modal format
+    const modalData = {
+      ...amphitheater,
+      capacity: amphitheater.capacity.toString()
+    };
+    setSelectedAmphitheater(modalData);
+    setIsModalOpen(true);
+  };
+
+  const handleViewAmphitheater = (amphitheater) => {
+    setSelectedAmphitheater(amphitheater);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleSaveAmphitheater = (amphitheaterData) => {
+    if (selectedAmphitheater) {
+      // Update existing amphitheater
+      setAmphitheaters(prev => prev.map(a => 
+        a.id === selectedAmphitheater.id 
+          ? { 
+              ...a, 
+              ...amphitheaterData,
+              capacity: parseInt(amphitheaterData.capacity),
+              university: getUniversityName(amphitheaterData.universityId)
+            }
+          : a
+      ));
+    } else {
+      // Add new amphitheater
+      const newAmphitheater = {
+        ...amphitheaterData,
+        id: Date.now(),
+        capacity: parseInt(amphitheaterData.capacity),
+        university: getUniversityName(amphitheaterData.universityId),
+        photos: 0
+      };
+      setAmphitheaters(prev => [...prev, newAmphitheater]);
+    }
+  };
+
+  const handleEditFromDetail = (amphitheater) => {
+    setIsDetailModalOpen(false);
+    handleEditAmphitheater(amphitheater);
+  };
+
+  const getUniversityName = (universityId: string) => {
+    const universities = {
+      "1": "Université Cheikh Anta Diop",
+      "2": "Université Gaston Berger",
+      "3": "Université Assane Seck",
+      "4": "Université Alioune Diop"
+    };
+    return universities[universityId] || "Université inconnue";
+  };
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -102,12 +175,10 @@ const Amphitheaters = () => {
           </p>
         </div>
         
-        <Link to="/admin/amphitheaters/new">
-          <Button variant="accent" className="flex items-center space-x-2">
-            <Plus className="h-4 w-4" />
-            <span>Ajouter Amphithéâtre</span>
-          </Button>
-        </Link>
+        <Button variant="accent" className="flex items-center space-x-2" onClick={handleAddAmphitheater}>
+          <Plus className="h-4 w-4" />
+          <span>Ajouter Amphithéâtre</span>
+        </Button>
       </div>
 
       {/* Search & Filters */}
@@ -180,16 +251,24 @@ const Amphitheaters = () => {
               </div>
 
               <div className="flex items-center space-x-2 pt-2">
-                <Button size="sm" variant="ghost" className="flex-1 hover:bg-accent-light hover:text-accent">
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="flex-1 hover:bg-accent-light hover:text-accent"
+                  onClick={() => handleViewAmphitheater(amphitheater)}
+                >
                   <Eye className="h-4 w-4 mr-1" />
                   Voir
                 </Button>
-                <Link to={`/admin/amphitheaters/${amphitheater.id}/edit`} className="flex-1">
-                  <Button size="sm" variant="ghost" className="w-full hover:bg-primary-light hover:text-primary">
-                    <Edit className="h-4 w-4 mr-1" />
-                    Modifier
-                  </Button>
-                </Link>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="flex-1 hover:bg-primary-light hover:text-primary"
+                  onClick={() => handleEditAmphitheater(amphitheater)}
+                >
+                  <Edit className="h-4 w-4 mr-1" />
+                  Modifier
+                </Button>
                 <Button size="sm" variant="ghost" className="hover:bg-destructive/10 hover:text-destructive">
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -247,15 +326,28 @@ const Amphitheaters = () => {
             <p className="text-muted-foreground mb-6">
               {searchTerm ? "Aucun résultat pour votre recherche." : "Commencez par ajouter votre premier amphithéâtre."}
             </p>
-            <Link to="/admin/amphitheaters/new">
-              <Button variant="accent">
-                <Plus className="h-4 w-4 mr-2" />
-                Ajouter un Amphithéâtre
-              </Button>
-            </Link>
+            <Button variant="accent" onClick={handleAddAmphitheater}>
+              <Plus className="h-4 w-4 mr-2" />
+              Ajouter un Amphithéâtre
+            </Button>
           </CardContent>
         </Card>
       )}
+
+      {/* Modals */}
+      <AmphitheaterModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        amphitheater={selectedAmphitheater}
+        onSave={handleSaveAmphitheater}
+      />
+
+      <AmphitheaterDetailModal
+        open={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
+        amphitheater={selectedAmphitheater}
+        onEdit={handleEditFromDetail}
+      />
     </div>
   );
 };

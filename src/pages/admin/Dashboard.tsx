@@ -1,9 +1,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Building2, GraduationCap, Users, MapPin, Plus, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import UniversityModal from "@/components/admin/UniversityModal";
+import AmphitheaterModal from "@/components/admin/AmphitheaterModal";
 
 const Dashboard = () => {
+  const [isUniversityModalOpen, setIsUniversityModalOpen] = useState(false);
+  const [isAmphitheaterModalOpen, setIsAmphitheaterModalOpen] = useState(false);
+
   const stats = [
     {
       title: "Universités",
@@ -70,6 +75,15 @@ const Dashboard = () => {
     }
   ];
 
+  const handleSaveUniversity = (universityData) => {
+    console.log("Nouvelle université:", universityData);
+    // TODO: Ajouter la logique de sauvegarde
+  };
+
+  const handleSaveAmphitheater = (amphitheaterData) => {
+    console.log("Nouvel amphithéâtre:", amphitheaterData);
+    // TODO: Ajouter la logique de sauvegarde
+  };
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
@@ -82,18 +96,22 @@ const Dashboard = () => {
         </div>
         
         <div className="flex items-center space-x-3">
-          <Link to="/admin/universities/new">
-            <Button variant="default" className="flex items-center space-x-2">
-              <Plus className="h-4 w-4" />
-              <span>Ajouter Université</span>
-            </Button>
-          </Link>
-          <Link to="/admin/amphitheaters/new">
-            <Button variant="accent" className="flex items-center space-x-2">
-              <Plus className="h-4 w-4" />
-              <span>Ajouter Amphithéâtre</span>
-            </Button>
-          </Link>
+          <Button 
+            variant="default" 
+            className="flex items-center space-x-2"
+            onClick={() => setIsUniversityModalOpen(true)}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Ajouter Université</span>
+          </Button>
+          <Button 
+            variant="accent" 
+            className="flex items-center space-x-2"
+            onClick={() => setIsAmphitheaterModalOpen(true)}
+          >
+            <Plus className="h-4 w-4" />
+            <span>Ajouter Amphithéâtre</span>
+          </Button>
         </div>
       </div>
 
@@ -173,37 +191,60 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Link to="/admin/universities">
-                <Button variant="outline" className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-primary-light hover:border-primary">
-                  <Building2 className="h-6 w-6" />
-                  <span className="text-sm">Gérer Universités</span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-primary-light hover:border-primary"
+                onClick={() => window.location.href = '/admin/universities'}
+              >
+                <Building2 className="h-6 w-6" />
+                <span className="text-sm">Gérer Universités</span>
+              </Button>
               
-              <Link to="/admin/amphitheaters">
-                <Button variant="outline" className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-accent-light hover:border-accent">
-                  <GraduationCap className="h-6 w-6" />
-                  <span className="text-sm">Gérer Amphithéâtres</span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-accent-light hover:border-accent"
+                onClick={() => window.location.href = '/admin/amphitheaters'}
+              >
+                <GraduationCap className="h-6 w-6" />
+                <span className="text-sm">Gérer Amphithéâtres</span>
+              </Button>
               
-              <Link to="/admin/users">
-                <Button variant="outline" className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-success-light hover:border-success">
-                  <Users className="h-6 w-6" />
-                  <span className="text-sm">Utilisateurs</span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-success-light hover:border-success"
+                onClick={() => window.location.href = '/admin/users'}
+              >
+                <Users className="h-6 w-6" />
+                <span className="text-sm">Utilisateurs</span>
+              </Button>
               
-              <Link to="/admin/settings">
-                <Button variant="outline" className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-warning-light hover:border-warning">
-                  <MapPin className="h-6 w-6" />
-                  <span className="text-sm">Paramètres</span>
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                className="w-full h-20 flex flex-col items-center space-y-2 hover:bg-warning-light hover:border-warning"
+                onClick={() => window.location.href = '/admin/settings'}
+              >
+                <MapPin className="h-6 w-6" />
+                <span className="text-sm">Paramètres</span>
+              </Button>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Modals */}
+      <UniversityModal
+        open={isUniversityModalOpen}
+        onOpenChange={setIsUniversityModalOpen}
+        university={null}
+        onSave={handleSaveUniversity}
+      />
+
+      <AmphitheaterModal
+        open={isAmphitheaterModalOpen}
+        onOpenChange={setIsAmphitheaterModalOpen}
+        amphitheater={null}
+        onSave={handleSaveAmphitheater}
+      />
     </div>
   );
 };
